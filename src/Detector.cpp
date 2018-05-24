@@ -12,8 +12,12 @@ std::vector<DetectedObject> Detector::detect(cv::Mat &image) {
     std::vector<DetectedObject> result;
     for (auto r = 0u; r < image.rows; ++r)
         for (auto c = 0u; c < image.cols; ++c)
-            if (image.at<uchar>(r, c) == 255)
-                result.emplace_back(detect_one(image, r, c));
+            if (image.at<uchar>(r, c) == 255) {
+                auto candidate = DetectedObject(detect_one(image, r, c));
+                if (candidate.get_area() < 100)
+                    continue;
+                result.push_back(candidate);
+            }
 
     return result;
 }
@@ -42,3 +46,13 @@ cv::Mat Detector::detect_one(cv::Mat &image, int row, int col) {
     return result;
 }
 
+std::vector<DetectedObject> &Detector::filter(std::vector<DetectedObject> &detected) {
+    for (auto it = detected.begin(); it != detected.end();) {
+        if (it->calculate_M1() < 0.30)
+            it = detected.erase(it);
+        else
+            ++it;
+    }
+
+    return detected;
+}

@@ -13,6 +13,8 @@ class Detector {
 public:
     static std::vector<DetectedObject> detect(cv::Mat &image);
 
+    static std::vector<DetectedObject> &filter(std::vector<DetectedObject> &detected);
+
 private:
     static cv::Mat detect_one(cv::Mat &image, int row, int col);
 };
