@@ -10,7 +10,7 @@ add_library(stdc++fs UNKNOWN IMPORTED)
 set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "/usr/lib/gcc/x86_64-linux-gnu/7/libstdc++fs.a")
 
 set(SOURCE_FILES
-        src/main.cpp src/logger.h)
+        src/main.cpp src/logger.h src/Morphology.cpp src/Morphology.h src/ConvolutionMask.cpp src/ConvolutionMask.h)
 
 add_executable(pobr_logo ${SOURCE_FILES})
 

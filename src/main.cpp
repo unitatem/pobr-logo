@@ -1,4 +1,5 @@
 #include "logger.h"
+#include "Morphology.h"
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -69,10 +70,14 @@ int main() {
 
     // bgr
     auto img_white = segment_threshold_to_mono(img, cv::Vec3b(230, 230, 230), cv::Vec3b(250, 250, 240));
-    show_image(img_white);
+    DEBUG(show_image(img_white);)
+    auto img_white_open = Morphology::open(img_white);
+    DEBUG(show_image(img_white_open);)
 
     auto img_yellow = segment_threshold_to_mono(img, cv::Vec3b(0, 200, 240), cv::Vec3b(100, 230, 255));
     DEBUG(show_image(img_yellow);)
+    auto img_yellow_open = Morphology::open(img_yellow);
+    DEBUG(show_image(img_yellow_open);)
 
     return 0;
 }
