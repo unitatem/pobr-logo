@@ -12,7 +12,7 @@ cv::Mat Segment::to_mono(const cv::Mat &image, const cv::Vec3b &low, const cv::V
         for (auto c = 0; c < image.cols; ++c) {
             const auto &pixel = image.at<cv::Vec3b>(r, c);
             if (op_ge(pixel, low) && op_le(pixel, high))
-                result.at<uchar >(r, c) = 255;
+                result.at<uchar>(r, c) = 255;
         }
 
     return result;
@@ -39,5 +39,3 @@ bool Segment::op_ge(const cv::Vec3b &value, const cv::Vec3b &ref) {
 bool Segment::op_le(const cv::Vec3b &value, const cv::Vec3b &ref) {
     return value[0] <= ref[0] && value[1] <= ref[1] && value[2] <= ref[2];
 }
-
-

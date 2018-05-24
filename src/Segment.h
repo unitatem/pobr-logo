@@ -5,7 +5,11 @@
 #ifndef POBR_LOGO_SEGMENT_H
 #define POBR_LOGO_SEGMENT_H
 
+#include "DetectedObject.h"
+
 #include "opencv2/core/core.hpp"
+
+#include <vector>
 
 class Segment {
 public:
