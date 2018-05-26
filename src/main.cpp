@@ -1,4 +1,4 @@
-#include "Detector.h"
+#include "Segment.h"
 #include "logger.h"
 #include "Morphology.h"
 #include "Transform.h"
@@ -23,54 +23,53 @@ int main() {
         cv::Mat img_hsv = Transform::rgb2hsv(img);
         Utils::show_hsv(img_hsv);
 
-        // bgr
-        auto img_white = Transform::channels2black(img_hsv, cv::Vec3b(130, 0, 200), cv::Vec3b(180, 40, 255));
+        auto img_white = Transform::channels2black(img_hsv, cv::Vec3b(120, 0, 170), cv::Vec3b(200, 40, 255));
         DEBUG(Utils::show(img_white);)
         auto img_white_open = Morphology::open(img_white);
-        DEBUG(Utils::show(img_white_open);)
+        DEBUG(Utils::show(img_white_open, "white");)
 
-        auto img_yellow = Transform::channels2black(img_hsv, cv::Vec3b(38, 220, 180), cv::Vec3b(44, 255, 235));
+        auto img_yellow = Transform::channels2black(img_hsv, cv::Vec3b(32, 150, 150), cv::Vec3b(44, 255, 255));
         DEBUG(Utils::show(img_yellow);)
         auto img_yellow_open = Morphology::open(img_yellow);
-        DEBUG(Utils::show(img_yellow_open);)
+        DEBUG(Utils::show(img_yellow_open, "yellow");)
 
-        auto detected_white = Detector::detect(img_white_open);
-        for (auto const &image : detected_white) {
-            std::cout << image;
-//        Utils::show(image.get_image());
-        }
+        auto detected_white = Segment::segment(img_white_open);
+//        for (auto const &image : detected_white) {
+//            std::cout << image;
+//            Utils::show(image.get_image());
+//        }
 
-        auto detected_yellow = Detector::detect(img_yellow_open);
-        for (auto const &image : detected_yellow) {
-            std::cout << image;
-//        Utils::show(image.get_image());
-        }
+        auto detected_yellow = Segment::segment(img_yellow_open);
+//        for (auto const &image : detected_yellow) {
+//            std::cout << image;
+//            Utils::show(image.get_image());
+//        }
 
-        DEBUG(std::cout << std::endl;)
-        detected_white = Detector::filter(detected_white);
-        for (auto const &image : detected_white) {
-            std::cout << image;
-//        Utils::show(image.get_image());
+        static auto idx = 0;
+        DEBUG(std::cout << "S" << std::endl;)
+        detected_white = Segment::filter_for_S(detected_white);
+        for (auto const &detected : detected_white) {
+            std::cout << idx++ << detected;
+            Utils::show(detected.get_image());
         }
-        detected_yellow = Detector::filter(detected_yellow);
-        for (auto const &image : detected_yellow) {
-            std::cout << image;
-//        Utils::show(image.get_image());
+        DEBUG(std::cout << "Y" << std::endl;)
+        detected_yellow = Segment::filter_for_Y(detected_yellow);
+        for (auto const &detected : detected_yellow) {
+            std::cout << idx++ << detected;
+            Utils::show(detected.get_image());
         }
 
         detected_white.insert(detected_white.end(), detected_yellow.begin(), detected_yellow.end());
 
-        cv::Rect bounding_box(detected_white[0].get_image().cols, detected_white[0].get_image().rows,
-                              -detected_white[0].get_image().cols, -detected_white[0].get_image().rows);
+        cv::Rect bounding_box;
         for (auto &image : detected_white) {
             auto bb = image.find_bounding_box();
             bounding_box |= bb;
         }
 
-        std::cout << bounding_box;
-
+        std::cout << bounding_box << std::endl;
         cv::rectangle(img, bounding_box, cv::Scalar(0, 0, 255));
-        Utils::show(img);
+        Utils::show(img, "final");
     }
 
     return 0;

@@ -13,12 +13,15 @@ public:
     DetectedObject(const cv::Mat &image);
 
     cv::Mat get_image() const;
-
     unsigned long long int get_area() const;
 
-    double calculate_M1() const;
+    bool check_for_S();
+    bool check_for_Y();
 
+    double calculate_M1() const;
     double calculate_M7() const;
+    double calculate_M2() const;
+    double calculate_M3() const;
 
     cv::Rect find_bounding_box();
 
