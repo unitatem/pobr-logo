@@ -22,6 +22,9 @@ public:
     double calculate_M7() const;
     double calculate_M2() const;
     double calculate_M3() const;
+    double calculate_M4() const;
+    double calculate_M5() const;
+    double calculate_M6() const;
 
     cv::Rect find_bounding_box();
 
