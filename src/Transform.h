@@ -2,8 +2,8 @@
 // Created by mariusz on 24.05.18.
 //
 
-#ifndef POBR_LOGO_SEGMENT_H
-#define POBR_LOGO_SEGMENT_H
+#ifndef POBR_LOGO_TRANSFORM_H
+#define POBR_LOGO_TRANSFORM_H
 
 #include "DetectedObject.h"
 
@@ -11,7 +11,7 @@
 
 #include <vector>
 
-class Segment {
+class Transform {
 public:
     static cv::Mat to_mono(const cv::Mat &image, const cv::Vec3b &low, const cv::Vec3b &high);
     static cv::Mat to_rgb(const cv::Mat &image, const cv::Vec3b &low, const cv::Vec3b &high);
@@ -22,4 +22,4 @@ private:
 };
 
 
-#endif //POBR_LOGO_SEGMENT_H
+#endif //POBR_LOGO_TRANSFORM_H

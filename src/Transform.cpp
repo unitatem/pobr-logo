@@ -2,9 +2,9 @@
 // Created by mariusz on 24.05.18.
 //
 
-#include "Segment.h"
+#include "Transform.h"
 
-cv::Mat Segment::to_mono(const cv::Mat &image, const cv::Vec3b &low, const cv::Vec3b &high) {
+cv::Mat Transform::to_mono(const cv::Mat &image, const cv::Vec3b &low, const cv::Vec3b &high) {
     assert(image.channels() == 3);
     cv::Mat result(image.rows, image.cols, CV_8UC1, cv::Scalar(0));
 
@@ -18,7 +18,7 @@ cv::Mat Segment::to_mono(const cv::Mat &image, const cv::Vec3b &low, const cv::V
     return result;
 }
 
-cv::Mat Segment::to_rgb(const cv::Mat &image, const cv::Vec3b &low, const cv::Vec3b &high) {
+cv::Mat Transform::to_rgb(const cv::Mat &image, const cv::Vec3b &low, const cv::Vec3b &high) {
     assert(image.channels() == 3);
     cv::Mat result(image.rows, image.cols, CV_8UC3, cv::Vec3b(0, 0, 0));
 
@@ -32,10 +32,10 @@ cv::Mat Segment::to_rgb(const cv::Mat &image, const cv::Vec3b &low, const cv::Ve
     return result;
 }
 
-bool Segment::op_ge(const cv::Vec3b &value, const cv::Vec3b &ref) {
+bool Transform::op_ge(const cv::Vec3b &value, const cv::Vec3b &ref) {
     return value[0] >= ref[0] && value[1] >= ref[1] && value[2] >= ref[2];
 }
 
-bool Segment::op_le(const cv::Vec3b &value, const cv::Vec3b &ref) {
+bool Transform::op_le(const cv::Vec3b &value, const cv::Vec3b &ref) {
     return value[0] <= ref[0] && value[1] <= ref[1] && value[2] <= ref[2];
 }
