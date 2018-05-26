@@ -11,7 +11,9 @@
 class Utils {
 public:
     static cv::Mat load_image(const std::string &path, int mode);
-    static void show(const cv::Mat &image);
+
+    static void show(const cv::Mat &image, std::string name = "tmp");
+    static void show_hsv(const cv::Mat &image);
 };
 
 
