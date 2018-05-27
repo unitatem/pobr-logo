@@ -26,7 +26,8 @@ public:
     double calculate_M5() const;
     double calculate_M6() const;
 
-    cv::Rect find_bounding_box() const;
+    cv::Rect get_bounding_box() const;
+    cv::Point get_center() const;
 
     friend std::ostream &operator<<(std::ostream &os, const DetectedObject &object);
 

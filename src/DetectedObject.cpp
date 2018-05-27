@@ -216,7 +216,7 @@ double DetectedObject::calculate_M7() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const DetectedObject &object) {
-    auto bb = object.find_bounding_box();
+    auto bb = object.get_bounding_box();
     os << "image:"
        << " AR=" << std::setw(12) << static_cast<double>(object.get_area()) / (object.image.cols * object.image.rows)
        << " ratio=" << std::setw(9) << static_cast<double>(bb.height) / bb.width
@@ -231,7 +231,7 @@ std::ostream &operator<<(std::ostream &os, const DetectedObject &object) {
     return os;
 }
 
-cv::Rect DetectedObject::find_bounding_box() const {
+cv::Rect DetectedObject::get_bounding_box() const {
     assert(image.channels() == 1);
 
     auto left = std::numeric_limits<int>::max();
@@ -254,8 +254,14 @@ cv::Rect DetectedObject::find_bounding_box() const {
     return {left, up, right - left, down - up};
 }
 
+cv::Point DetectedObject::get_center() const {
+    auto bb = get_bounding_box();
+    return {static_cast<int>(bb.x + bb.width * 0.5),
+            static_cast<int>(bb.y + bb.height * 0.5)};
+}
+
 bool DetectedObject::check_ratio_constraints(double low, double high) const {
-    auto bb = find_bounding_box();
+    auto bb = get_bounding_box();
     auto ratio = static_cast<double >(bb.height) / bb.width;
     return ratio > low && ratio < high;
 }

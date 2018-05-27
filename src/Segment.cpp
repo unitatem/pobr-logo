@@ -2,6 +2,7 @@
 // Created by mariusz on 24.05.18.
 //
 
+#include "logger.h"
 #include "Segment.h"
 #include "Utils.h"
 
@@ -46,11 +47,37 @@ std::vector<DetectedObject> &Segment::filter_for_Y(std::vector<DetectedObject> &
 
 std::vector<DetectedObject>
 Segment::find_best_pair(const std::vector<DetectedObject> &ss, const std::vector<DetectedObject> &yy) {
-    auto result = ss;
+    if (ss.size() == 0) {
+        std::cout << "WARNING: No S object to merge" << std::endl;
+        return yy;
+    }
 
-    if (ss.size() <= 1 && yy.size() <= 1)
-        result.insert(result.end(), yy.begin(), yy.end());;
+    if (yy.size() == 0) {
+        std::cout << "WARNING: No Y object to merge" << std::endl;
+        return ss;
+    }
 
+    auto best_ss = 0;
+    auto best_yy = 0;
+    auto best_orientation = M_PI;
+    for (auto idx_ss = 0; idx_ss < ss.size(); ++idx_ss) {
+        auto center_ss = ss[idx_ss].get_center();
+        for (auto idx_yy = 0; idx_yy < yy.size(); ++idx_yy) {
+            auto center_yy = yy[idx_yy].get_center();
+            auto diff = center_yy - center_ss;
+
+            auto orientation = atan2(diff.y, diff.x);
+            if (abs(orientation) < abs(best_orientation)) {
+                best_orientation = orientation;
+                best_ss = idx_ss;
+                best_yy = idx_yy;
+            }
+        }
+    }
+
+    std::vector<DetectedObject> result;
+    result.push_back(ss[best_ss]);
+    result.push_back(yy[best_yy]);
     return result;
 }
 

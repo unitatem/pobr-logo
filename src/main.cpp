@@ -63,11 +63,11 @@ int main() {
             Utils::show(detected.get_image());
         }
 
-        detected_white.insert(detected_white.end(), detected_yellow.begin(), detected_yellow.end());
+        auto best_pair = Segment::find_best_pair(detected_white, detected_yellow);
 
         cv::Rect bounding_box;
-        for (auto &image : detected_white) {
-            auto bb = image.find_bounding_box();
+        for (auto &image : best_pair) {
+            auto bb = image.get_bounding_box();
             bounding_box |= bb;
         }
 
