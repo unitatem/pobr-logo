@@ -15,7 +15,7 @@ std::vector<DetectedObject> Segment::segment(cv::Mat &image) {
             if (image.at<uchar>(r, c) == 255) {
                 auto segment = find_one(image, r, c);
                 auto candidate = DetectedObject(segment);
-                if (check_area_constraints(candidate))
+                if (check_geometry_constraints(candidate))
                     result.push_back(candidate);
             }
 
@@ -44,8 +44,8 @@ std::vector<DetectedObject> &Segment::filter_for_Y(std::vector<DetectedObject> &
     return detected;
 }
 
-bool Segment::check_area_constraints(const DetectedObject &object) {
-    return static_cast<double>(object.get_area()) / (object.get_image().rows * object.get_image().cols) > 0.001; // && object.get_area() < object.get_image().rows * object.get_image().cols * 0.05;
+bool Segment::check_geometry_constraints(const DetectedObject &object) {
+    return object.get_area() / (object.get_image().rows * object.get_image().cols) > 0.001; // && object.get_area() < object.get_image().rows * object.get_image().cols * 0.05;
 }
 
 cv::Mat Segment::find_one(cv::Mat &image, int row, int col) {

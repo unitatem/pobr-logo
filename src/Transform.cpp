@@ -23,10 +23,29 @@ cv::Mat Transform::channels2black(const cv::Mat &image, const cv::Vec3b &low, co
     assert(image.channels() == 3);
     cv::Mat result(image.rows, image.cols, CV_8UC1, cv::Scalar(0));
 
+    cv::Vec3i low_adj = low;
+    cv::Vec3i high_adj = high;
+    auto inverse_0 = low[0] > high[0];
+    if (inverse_0)
+        high_adj[0] += 255;
+    auto inverse_1 = low[1] > high[1];
+    if (inverse_1)
+        high_adj[1] += 255;
+    auto inverse_2 = low[2] > high[2];
+    if (inverse_2)
+        high_adj[2] += 255;
+
     for (auto r = 0; r < image.rows; ++r)
         for (auto c = 0; c < image.cols; ++c) {
-            const auto &pixel = image.at<cv::Vec3b>(r, c);
-            if (op_ge(pixel, low) && op_le(pixel, high))
+            cv::Vec3i pixel = image.at<cv::Vec3b>(r, c);
+            if (inverse_0 && pixel[0] < high[0])
+                pixel[0] += 255;
+            if (inverse_1 && pixel[1] < high[1])
+                pixel[1] += 255;
+            if (inverse_2 && pixel[2] < high[2])
+                pixel[2] += 255;
+
+            if (op_ge(pixel, low_adj) && op_le(pixel, high_adj))
                 result.at<uchar>(r, c) = 255;
         }
 
@@ -54,9 +73,9 @@ cv::Mat Transform::rgb2hsv(const cv::Mat &image) {
     for (auto r = 0; r < image.rows; ++r)
         for (auto c = 0; c < image.cols; ++c) {
             const auto &pixel = image.at<cv::Vec3b>(r, c);
-            auto red = pixel[2];
+            auto red = pixel[0];
             auto green = pixel[1];
-            auto blue = pixel[0];
+            auto blue = pixel[2];
 
             auto c_max = std::max(red, std::max(green, blue));
             auto c_min = std::min(red, std::min(green, blue));
@@ -84,10 +103,10 @@ cv::Mat Transform::rgb2hsv(const cv::Mat &image) {
     return result;
 }
 
-bool Transform::op_ge(const cv::Vec3b &value, const cv::Vec3b &ref) {
+bool Transform::op_ge(const cv::Vec3i &value, const cv::Vec3i &ref) {
     return value[0] >= ref[0] && value[1] >= ref[1] && value[2] >= ref[2];
 }
 
-bool Transform::op_le(const cv::Vec3b &value, const cv::Vec3b &ref) {
+bool Transform::op_le(const cv::Vec3i &value, const cv::Vec3i &ref) {
     return value[0] <= ref[0] && value[1] <= ref[1] && value[2] <= ref[2];
 }

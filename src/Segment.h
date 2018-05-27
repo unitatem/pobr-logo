@@ -17,7 +17,7 @@ public:
     static std::vector<DetectedObject> &filter_for_Y(std::vector<DetectedObject> &detected);
 
 private:
-    static bool check_area_constraints(const DetectedObject &object);
+    static bool check_geometry_constraints(const DetectedObject &object);
     static cv::Mat find_one(cv::Mat &image, int row, int col);
 };
 

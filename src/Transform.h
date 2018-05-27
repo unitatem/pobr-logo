@@ -21,8 +21,8 @@ public:
     static cv::Mat rgb2hsv(const cv::Mat &image);
 
 private:
-    static bool op_ge(const cv::Vec3b &value, const cv::Vec3b &ref);
-    static bool op_le(const cv::Vec3b &value, const cv::Vec3b &ref);
+    static bool op_ge(const cv::Vec3i &value, const cv::Vec3i &ref);
+    static bool op_le(const cv::Vec3i &value, const cv::Vec3i &ref);
 };
 
 

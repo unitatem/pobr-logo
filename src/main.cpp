@@ -23,12 +23,12 @@ int main() {
         cv::Mat img_hsv = Transform::rgb2hsv(img);
         Utils::show_hsv(img_hsv);
 
-        auto img_white = Transform::channels2black(img_hsv, cv::Vec3b(120, 0, 170), cv::Vec3b(200, 40, 255));
+        auto img_white = Transform::channels2black(img_hsv, cv::Vec3b(245, 0, 170), cv::Vec3b(30, 40, 255));
         DEBUG(Utils::show(img_white);)
         auto img_white_open = Morphology::open(img_white);
         DEBUG(Utils::show(img_white_open, "white");)
 
-        auto img_yellow = Transform::channels2black(img_hsv, cv::Vec3b(32, 100, 150), cv::Vec3b(44, 255, 255));
+        auto img_yellow = Transform::channels2black(img_hsv, cv::Vec3b(120, 100, 150), cv::Vec3b(140, 255, 255));
         DEBUG(Utils::show(img_yellow);)
         auto img_yellow_open = Morphology::open(img_yellow);
         DEBUG(Utils::show(img_yellow_open, "yellow");)

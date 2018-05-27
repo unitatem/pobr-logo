@@ -61,6 +61,9 @@ double DetectedObject::get_area() const {
 }
 
 bool DetectedObject::check_for_S() {
+    if (!check_ratio_contraints(0.6, 2.3))
+        return false;
+
     auto M1 = calculate_M1();
     auto M2 = calculate_M2();
     auto M3 = calculate_M3();
@@ -78,16 +81,22 @@ bool DetectedObject::check_for_S() {
 }
 
 bool DetectedObject::check_for_Y() {
+    if (!check_ratio_contraints(0.6, 2.3))
+        return false;
+
     auto M1 = calculate_M1();
     auto M2 = calculate_M2();
     auto M3 = calculate_M3();
     auto M4 = calculate_M4();
+    auto M5 = calculate_M5();
+    auto M6 = calculate_M6();
     auto M7 = calculate_M7();
 
-    return M1 > 0.3 && M1 < 0.37
-           && M2 > 0.01 && M2 < 0.05
+    return M1 > 0.29 && M1 < 0.45
+           && M2 > 0.01 && M2 < 0.15
            && M3 > 0.01 && M3 < 0.04
-           && M4 < 0.003
+           && M4 < 0.005
+           && M5 * M6 > 0.0
            && M7 > 0.01 && M7 < 0.03;
 }
 
@@ -164,8 +173,10 @@ double DetectedObject::calculate_M7() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const DetectedObject &object) {
+    auto bb = object.find_bounding_box();
     os << "image:"
        << " AR=" << std::setw(12) << static_cast<double>(object.get_area()) / (object.image.cols * object.image.rows)
+       << " ratio=" << std::setw(9) << static_cast<double>(bb.height) / bb.width
        << " M1=" << std::setw(9) << object.calculate_M1()
        << " M2=" << std::setw(10) << object.calculate_M2()
        << " M3=" << std::setw(12) << object.calculate_M3()
@@ -177,7 +188,7 @@ std::ostream &operator<<(std::ostream &os, const DetectedObject &object) {
     return os;
 }
 
-cv::Rect DetectedObject::find_bounding_box() {
+cv::Rect DetectedObject::find_bounding_box() const {
     assert(image.channels() == 1);
 
     auto left = std::numeric_limits<int>::max();
@@ -198,4 +209,10 @@ cv::Rect DetectedObject::find_bounding_box() {
                     down = r;
             }
     return {left, up, right - left, down - up};
+}
+
+bool DetectedObject::check_ratio_contraints(double low, double high) const {
+    auto bb = find_bounding_box();
+    auto ratio = static_cast<double >(bb.height) / bb.width;
+    return ratio > low && ratio < high;
 }

@@ -26,7 +26,7 @@ public:
     double calculate_M5() const;
     double calculate_M6() const;
 
-    cv::Rect find_bounding_box();
+    cv::Rect find_bounding_box() const;
 
     friend std::ostream &operator<<(std::ostream &os, const DetectedObject &object);
 
@@ -40,6 +40,8 @@ private:
 
     double inertia_moment(int vertical_order, int horizontal_order) const;
     void calculate_all_inertia_moment();
+
+    bool check_ratio_contraints(double low, double high) const;
 };
 
 
