@@ -13,7 +13,7 @@ public:
     DetectedObject(const cv::Mat &image);
 
     cv::Mat get_image() const;
-    unsigned long long int get_area() const;
+    double get_area() const;
 
     bool check_for_S();
     bool check_for_Y();
@@ -33,7 +33,13 @@ public:
 private:
     cv::Mat image;
 
-    unsigned long long int inertia_moment(int vertical_order, int horizontal_order) const;
+    double m00;
+    double m10, m20, m30;
+    double m01, m02, m03;
+    double m21, m11, m12;
+
+    double inertia_moment(int vertical_order, int horizontal_order) const;
+    void calculate_all_inertia_moment();
 };
 
 

@@ -28,7 +28,7 @@ int main() {
         auto img_white_open = Morphology::open(img_white);
         DEBUG(Utils::show(img_white_open, "white");)
 
-        auto img_yellow = Transform::channels2black(img_hsv, cv::Vec3b(32, 150, 150), cv::Vec3b(44, 255, 255));
+        auto img_yellow = Transform::channels2black(img_hsv, cv::Vec3b(32, 100, 150), cv::Vec3b(44, 255, 255));
         DEBUG(Utils::show(img_yellow);)
         auto img_yellow_open = Morphology::open(img_yellow);
         DEBUG(Utils::show(img_yellow_open, "yellow");)
@@ -67,7 +67,7 @@ int main() {
             bounding_box |= bb;
         }
 
-        std::cout << bounding_box << std::endl;
+        std::cout << bounding_box << "\n" << std::endl;
         cv::rectangle(img, bounding_box, cv::Scalar(0, 0, 255));
         Utils::show(img, "final");
     }
