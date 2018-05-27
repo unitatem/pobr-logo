@@ -90,19 +90,21 @@ cv::Mat Segment::find_one(cv::Mat &image, int row, int col) {
     cv::Mat result(image.rows, image.cols, CV_8UC1, cv::Scalar(0));
 
     std::vector<cv::Point> to_visit;
-    to_visit.emplace_back(row, col);
+    // (x = col, y = row)
+    to_visit.emplace_back(col, row);
     while (!to_visit.empty()) {
         auto point = to_visit.back();
         to_visit.pop_back();
-        result.at<uchar>(point.x, point.y) = 255;
-        image.at<uchar>(point.x, point.y) = 0;
+
+        result.at<uchar>(point.y, point.x) = 255;
+        image.at<uchar>(point.y, point.x) = 0;
 
         for (auto r = -1; r < 2; ++r)
             for (auto c = -1; c < 2; ++c) {
-                if (point.x + r < 0 || point.x + r >= image.rows || point.y + c < 0 || point.y + c >= image.cols)
+                if (point.y + r < 0 || point.y + r >= image.rows || point.x + c < 0 || point.x + c >= image.cols)
                     continue;
-                if (image.at<uchar>(point.x + r, point.y + c) == 255)
-                    to_visit.emplace_back(point.x + r, point.y + c);
+                if (image.at<uchar>(point.y + r, point.x + c) == 255)
+                    to_visit.emplace_back(point.x + c, point.y + r);
             }
     }
 

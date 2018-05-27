@@ -62,41 +62,35 @@ double DetectedObject::get_area() const {
 }
 
 bool DetectedObject::check_for_S() const {
-    if (!check_ratio_constraints(0.6, 1.5)) {
-        DEBUG(std::cout << "FAIL: ratio" << std::endl;)
-        return false;
+    if (!check_ratio_constraints(0.6, 2.2)) {
+        DEBUG_ENABLE(std::cout << "FAIL: ratio" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
 
     auto M1 = calculate_M1();
     if (M1 < 0.26 || M1 > 0.50) {
-        DEBUG(std::cout << "FAIL: M1" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M1" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M2 = calculate_M2();
     if (M2 < 0.01 || M2 > 0.15) {
-        DEBUG(std::cout << "FAIL: M2" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M2" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M3 = calculate_M3();
-    if (M3 < 0.005 || M3 > 0.07) {
-        DEBUG(std::cout << "FAIL: M3" << std::endl;)
-        return false;
+    if (M3 < 0.0025 || M3 > 0.07) {
+        DEBUG_ENABLE(std::cout << "FAIL: M3" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M4 = calculate_M4();
-    if (M4 < 0.0003 || M4 > 0.007) {
-        DEBUG(std::cout << "FAIL: M4" << std::endl;)
-        return false;
-    }
-    auto M5 = calculate_M5();
-    auto M6 = calculate_M6();
-    if (M5 * M6 < 0.0) {
-        DEBUG(std::cout << "FAIL: M5 * M6" << std::endl;)
-        return false;
+    if (M4 < 0.00016 || M4 > 0.007) {
+        DEBUG_ENABLE(std::cout << "FAIL: M4" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M7 = calculate_M7();
     if (M7 < 0.01 || M7 > 0.038) {
-        DEBUG(std::cout << "FAIL: M7" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M7" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
 
     return true;
@@ -104,40 +98,34 @@ bool DetectedObject::check_for_S() const {
 
 bool DetectedObject::check_for_Y() const {
     if (!check_ratio_constraints(0.6, 2.3)) {
-        DEBUG(std::cout << "FAIL: ratio" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: ratio" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
 
     auto M1 = calculate_M1();
     if (M1 < 0.29 || M1 > 0.45) {
-        DEBUG(std::cout << "FAIL: M1" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M1" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M2 = calculate_M2();
     if (M2 < 0.01 || M2 > 0.15) {
-        DEBUG(std::cout << "FAIL: M2" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M2" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M3 = calculate_M3();
-    if (M3 < 0.01 || M3 > 0.04) {
-        DEBUG(std::cout << "FAIL: M3" << std::endl;)
-        return false;
+    if (M3 < 0.01 || M3 > 0.05) {
+        DEBUG_ENABLE(std::cout << "FAIL: M3" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M4 = calculate_M4();
     if (M4 > 0.005) {
-        DEBUG(std::cout << "FAIL: M4" << std::endl;)
-        return false;
-    }
-    auto M5 = calculate_M5();
-    auto M6 = calculate_M6();
-    if (M5 * M6 < 0.0) {
-        DEBUG(std::cout << "FAIL: M5 * M6" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M4" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
     auto M7 = calculate_M7();
     if (M7 < 0.01 || M7 > 0.03) {
-        DEBUG(std::cout << "FAIL: M7" << std::endl;)
-        return false;
+        DEBUG_ENABLE(std::cout << "FAIL: M7" << std::endl;)
+        DEBUG_DISABLE(return false;)
     }
 
     return true;
