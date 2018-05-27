@@ -15,8 +15,8 @@ public:
     cv::Mat get_image() const;
     double get_area() const;
 
-    bool check_for_S();
-    bool check_for_Y();
+    bool check_for_S() const;
+    bool check_for_Y() const;
 
     double calculate_M1() const;
     double calculate_M7() const;
@@ -41,7 +41,7 @@ private:
     double inertia_moment(int vertical_order, int horizontal_order) const;
     void calculate_all_inertia_moment();
 
-    bool check_ratio_contraints(double low, double high) const;
+    bool check_ratio_constraints(double low, double high) const;
 };
 
 

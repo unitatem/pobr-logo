@@ -8,6 +8,9 @@
 #define DEBUG_ENABLED
 
 #ifdef DEBUG_ENABLED
+
+#include <iostream>
+
 #define DEBUG(x) x
 #endif
 

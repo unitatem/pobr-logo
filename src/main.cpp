@@ -13,17 +13,19 @@ int main() {
     std::cout << "START" << std::endl;
 
     std::experimental::filesystem::path images_path("resources/image");
-//    auto img_path = "resources/image/Subway_2.jpg";
-    for (const auto &img_path : std::experimental::filesystem::directory_iterator(images_path)) {
+//    auto img_path = "resources/image/uspeshen-franchaizing-biznes-subway.jpg";
+    for (const auto &path : std::experimental::filesystem::directory_iterator(images_path))
+    {
+        auto img_path = path.path().string();
         DEBUG(std::cout << "img_path = " << img_path << std::endl;)
 
-        auto img = Utils::load_image(img_path.path().string(), cv::ImreadModes::IMREAD_COLOR);
+        auto img = Utils::load_image(img_path, cv::ImreadModes::IMREAD_COLOR);
         Utils::show(img, "original");
 
         cv::Mat img_hsv = Transform::rgb2hsv(img);
         Utils::show_hsv(img_hsv);
 
-        auto img_white = Transform::channels2black(img_hsv, cv::Vec3b(245, 0, 170), cv::Vec3b(30, 40, 255));
+        auto img_white = Transform::channels2black(img_hsv, cv::Vec3b(230, 0, 170), cv::Vec3b(70, 40, 255));
         DEBUG(Utils::show(img_white);)
         auto img_white_open = Morphology::open(img_white);
         DEBUG(Utils::show(img_white_open, "white");)
@@ -50,12 +52,14 @@ int main() {
         detected_white = Segment::filter_for_S(detected_white);
         for (auto const &detected : detected_white) {
             std::cout << idx++ << detected;
+            detected.check_for_S();
             Utils::show(detected.get_image());
         }
         DEBUG(std::cout << "Y" << std::endl;)
         detected_yellow = Segment::filter_for_Y(detected_yellow);
         for (auto const &detected : detected_yellow) {
             std::cout << idx++ << detected;
+            detected.check_for_Y();
             Utils::show(detected.get_image());
         }
 
@@ -68,7 +72,7 @@ int main() {
         }
 
         std::cout << bounding_box << "\n" << std::endl;
-        cv::rectangle(img, bounding_box, cv::Scalar(0, 0, 255));
+        cv::rectangle(img, bounding_box, cv::Scalar(0, 0, 255), 3);
         Utils::show(img, "final");
     }
 

@@ -3,6 +3,7 @@
 //
 
 #include "DetectedObject.h"
+#include "logger.h"
 
 #include <iomanip>
 
@@ -60,44 +61,86 @@ double DetectedObject::get_area() const {
     return inertia_moment(0, 0);
 }
 
-bool DetectedObject::check_for_S() {
-    if (!check_ratio_contraints(0.6, 2.3))
+bool DetectedObject::check_for_S() const {
+    if (!check_ratio_constraints(0.6, 1.5)) {
+        DEBUG(std::cout << "FAIL: ratio" << std::endl;)
         return false;
+    }
 
     auto M1 = calculate_M1();
+    if (M1 < 0.26 || M1 > 0.50) {
+        DEBUG(std::cout << "FAIL: M1" << std::endl;)
+        return false;
+    }
     auto M2 = calculate_M2();
+    if (M2 < 0.01 || M2 > 0.15) {
+        DEBUG(std::cout << "FAIL: M2" << std::endl;)
+        return false;
+    }
     auto M3 = calculate_M3();
+    if (M3 < 0.005 || M3 > 0.07) {
+        DEBUG(std::cout << "FAIL: M3" << std::endl;)
+        return false;
+    }
     auto M4 = calculate_M4();
+    if (M4 < 0.0003 || M4 > 0.007) {
+        DEBUG(std::cout << "FAIL: M4" << std::endl;)
+        return false;
+    }
     auto M5 = calculate_M5();
     auto M6 = calculate_M6();
+    if (M5 * M6 < 0.0) {
+        DEBUG(std::cout << "FAIL: M5 * M6" << std::endl;)
+        return false;
+    }
     auto M7 = calculate_M7();
+    if (M7 < 0.01 || M7 > 0.038) {
+        DEBUG(std::cout << "FAIL: M7" << std::endl;)
+        return false;
+    }
 
-    return M1 > 0.26 && M1 < 0.50
-           && M2 > 0.01 && M2 < 0.15
-           && M3 > 0.005 && M3 < 0.07
-           && M4 > 0.0003 && M4 < 007
-           && M5 * M6 > 0.0
-           && M7 > 0.01 && M7 < 0.03;
+    return true;
 }
 
-bool DetectedObject::check_for_Y() {
-    if (!check_ratio_contraints(0.6, 2.3))
+bool DetectedObject::check_for_Y() const {
+    if (!check_ratio_constraints(0.6, 2.3)) {
+        DEBUG(std::cout << "FAIL: ratio" << std::endl;)
         return false;
+    }
 
     auto M1 = calculate_M1();
+    if (M1 < 0.29 || M1 > 0.45) {
+        DEBUG(std::cout << "FAIL: M1" << std::endl;)
+        return false;
+    }
     auto M2 = calculate_M2();
+    if (M2 < 0.01 || M2 > 0.15) {
+        DEBUG(std::cout << "FAIL: M2" << std::endl;)
+        return false;
+    }
     auto M3 = calculate_M3();
+    if (M3 < 0.01 || M3 > 0.04) {
+        DEBUG(std::cout << "FAIL: M3" << std::endl;)
+        return false;
+    }
     auto M4 = calculate_M4();
+    if (M4 > 0.005) {
+        DEBUG(std::cout << "FAIL: M4" << std::endl;)
+        return false;
+    }
     auto M5 = calculate_M5();
     auto M6 = calculate_M6();
+    if (M5 * M6 < 0.0) {
+        DEBUG(std::cout << "FAIL: M5 * M6" << std::endl;)
+        return false;
+    }
     auto M7 = calculate_M7();
+    if (M7 < 0.01 || M7 > 0.03) {
+        DEBUG(std::cout << "FAIL: M7" << std::endl;)
+        return false;
+    }
 
-    return M1 > 0.29 && M1 < 0.45
-           && M2 > 0.01 && M2 < 0.15
-           && M3 > 0.01 && M3 < 0.04
-           && M4 < 0.005
-           && M5 * M6 > 0.0
-           && M7 > 0.01 && M7 < 0.03;
+    return true;
 }
 
 double DetectedObject::calculate_M1() const {
@@ -211,7 +254,7 @@ cv::Rect DetectedObject::find_bounding_box() const {
     return {left, up, right - left, down - up};
 }
 
-bool DetectedObject::check_ratio_contraints(double low, double high) const {
+bool DetectedObject::check_ratio_constraints(double low, double high) const {
     auto bb = find_bounding_box();
     auto ratio = static_cast<double >(bb.height) / bb.width;
     return ratio > low && ratio < high;

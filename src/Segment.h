@@ -14,10 +14,15 @@ public:
     static std::vector<DetectedObject> segment(cv::Mat &image);
 
     static std::vector<DetectedObject> &filter_for_S(std::vector<DetectedObject> &detected);
+
     static std::vector<DetectedObject> &filter_for_Y(std::vector<DetectedObject> &detected);
+
+    static std::vector<DetectedObject>
+    find_best_pair(const std::vector<DetectedObject> &ss, const std::vector<DetectedObject> &yy);
 
 private:
     static bool check_geometry_constraints(const DetectedObject &object);
+
     static cv::Mat find_one(cv::Mat &image, int row, int col);
 };
 

@@ -44,8 +44,19 @@ std::vector<DetectedObject> &Segment::filter_for_Y(std::vector<DetectedObject> &
     return detected;
 }
 
+std::vector<DetectedObject>
+Segment::find_best_pair(const std::vector<DetectedObject> &ss, const std::vector<DetectedObject> &yy) {
+    auto result = ss;
+
+    if (ss.size() <= 1 && yy.size() <= 1)
+        result.insert(result.end(), yy.begin(), yy.end());;
+
+    return result;
+}
+
 bool Segment::check_geometry_constraints(const DetectedObject &object) {
-    return object.get_area() / (object.get_image().rows * object.get_image().cols) > 0.001; // && object.get_area() < object.get_image().rows * object.get_image().cols * 0.05;
+    return object.get_area() / (object.get_image().rows * object.get_image().cols) >
+           0.0009; // && object.get_area() < object.get_image().rows * object.get_image().cols * 0.05;
 }
 
 cv::Mat Segment::find_one(cv::Mat &image, int row, int col) {
